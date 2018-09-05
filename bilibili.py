@@ -12,41 +12,6 @@ class Bilibili:
         self.session = requests.session()
         self.csrf = None
 
-    def login(self, username, password):
-        """
-        调用第三方API，请谨慎使用
-        详情见：http://docs.kaaass.net/showdoc/web/#/2?page_id=3
-        :param username:登录的用户名
-        :param password:密码
-        :return:
-        """
-        req = self.post(
-            url='https://api.kaaass.net/biliapi/user/login',
-            data={
-                'user': username,
-                'passwd': password
-            }
-        )
-        if req['status'] == 'OK':
-            login = self.get(
-                url='https://api.kaaass.net/biliapi/user/sso',
-                params={
-                    'access_key': req['access_key']
-                }
-            )
-            if login['status'] == 'OK':
-                print(login['cookie'])
-                cookies = {}
-                for line in login['cookie'].split(';')[:-1]:
-                    name, value = line.strip().split('=')
-                    cookies[name] = value
-                cookies = requests.utils.cookiejar_from_dict(cookies, cookiejar=None, overwrite=True)
-                self.session.cookies = cookies
-                self.csrf = self.session.cookies.get('bili_jct')
-                return True
-            else:
-                return login
-
     def login_by_cookies(self, path):
         try:
             with open(path, 'r') as f:

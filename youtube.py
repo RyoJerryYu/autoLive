@@ -1,7 +1,6 @@
 import configparser
 import os
 import re
-import sys
 import time
 from datetime import datetime
 from bilibili import Bilibili
@@ -25,20 +24,9 @@ if __name__ == '__main__':
         if b.isLogin():
             LOGIN_STATUS = True
     if not LOGIN_STATUS:
-        login_type = input("[提示]请选择Bilibili登录方式:\n1.cookies登录\n2.账号密码登录(不推荐)\n(程序启动会自动读取同级目录下的cookies.txt文件尝试登录,如果登录成功,则自动跳过这一步)\n请选择:")
-        if login_type == '1':
             cookies = input("[提示]请粘贴cookies信息:")
             b.login_by_cookies_str(cookies)
             b.isLogin()
-        elif login_type == '2':
-            username = input("[提示]请输入用户名:")
-            password = input("[提示]请输入密码:")
-            b.login(username, password)
-            b.isLogin()
-        else:
-            print("[提示]你说什么啊,我听不懂~")
-            print("BOOM!")
-            sys.exit()
     my_info = b.get_my_basic_info()
     print("[提示][已登录账号{}][mid:{}][昵称:{}]".format(my_info['userid'], my_info['mid'], my_info['uname']))
     print("[提示]请输入Youtube直播地址:")
