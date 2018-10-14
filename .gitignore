@@ -102,12 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-<<<<<<< HEAD
-=======
 
 # test file
-/cookies.txt
-/log.txt
-/err.log
-/test.py
->>>>>>> af51741... add refresh_area_id
+cookies.txt
+log.txt
+err.log
+test.py
+.removed/
