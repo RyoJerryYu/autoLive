@@ -51,7 +51,7 @@ def __analyse_live_list(text):
             if len(args) > 2:
                 if args[2] in sites:
                     site = args[2]
-                    if len(args) == 4:
+                    if len(args) > 3:
                         title = args[-1]
                 else:
                     title = args[-1]
