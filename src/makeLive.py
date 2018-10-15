@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+'''直播信息相关函数
+一次直播以以下形式记录：
+{
+    'time': datetime.datetime, 用于任务开始的时间，即直播开始的时间
+    'id': str, 用于scheduler中直播任务的唯一id，以 time_txt+liver 的形式保证唯一性
+    'args': {
+        'time': datetime.datetime, 直播开始的时间，与上面的'time'值相同
+        'liver': str, 直播liver名，应在liveInfo.json中存在
+        'site': str, 目前只支持YouTube
+        'title': str, 用于直播间标题的可变内容
+    }
+}
+'''
 import os
 from datetime import datetime, timedelta, timezone
 import configparser
@@ -7,6 +21,18 @@ from src.login_bilibili import login_bilibili
 
 
 def __analyse_live_list(text):
+    '''分析时间表text并输出直播信息列表
+
+    时间表text每行为 time@liver@site@title
+    site可省略，可用值只能在sites中选择，默认为YouTube
+    title可省略，默认为 liver+' 转播'，如果参数过多不报错，title默认为最后一个参数
+
+    Args:
+        text: str,
+    
+    Returns:
+        lives: list, 直播信息列表
+    '''
     JST = timezone(timedelta(hours=+9), 'JST')
     sites = ['YouTube']
     lives = []
@@ -69,6 +95,8 @@ def __analyse_live_list(text):
 
 
 def __make_schedule_post_txt(lives):
+    '''读取lives列表，输出用于发动态的时间表字符串
+    '''
     txt = '今日转播：\n'
     for live in lives:
         txt += '{}, {}, {}\n{}\n'.format(
@@ -81,6 +109,27 @@ def __make_schedule_post_txt(lives):
 
 
 def makeLives(CONFIG_PATH):
+    '''读取schedule.txt，解析，发送B站动态，并输出直播信息列表
+
+    Args:
+        CONFIG_PATH: str, config.ini路径
+    
+    Returns:
+        lives: 直播信息列表，结构如下：
+            [
+                {
+                    'time': datetime.datetime, 用于任务开始的时间，即直播开始的时间
+                    'id': str, 用于scheduler中直播任务的唯一id，以 time_txt+liver 的形式保证唯一性
+                    'args': {
+                        'time': datetime.datetime, 直播开始的时间，与上面的'time'值相同
+                        'liver': str, 直播liver名，应在liveInfo.json中存在
+                        'site': str, 目前只支持YouTube
+                        'title': str, 用于直播间标题的可变内容
+                    }
+                },
+                {...}
+            ]
+    '''
     # Read config
     config = configparser.ConfigParser()
     config.read("config.ini", encoding="utf-8")

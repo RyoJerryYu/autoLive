@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import configparser
 import os
 from time import sleep
@@ -23,6 +24,8 @@ def get_live_url(path, liver, site='YouTube'):
 
 
 def get_method(site='YouTube'):
+    '''获取转播的网站，返回对应网站中获取m3u8与推流的方法
+    '''
     if site == 'YouTube':
         get_m3u8 = m_youtube.get_m3u8
         push_stream = m_youtube.push_stream
@@ -30,13 +33,36 @@ def get_method(site='YouTube'):
 
 
 def rebroadcast(args, CONFIG_PATH):
-    """
-    :param args:{
-        'time': datetime.datetime, 
-        'liver': string,
-        'site': string, default='YouTube',
-        'title': string, default='liver+'转播',
-    }
+    """一次转播任务的主函数
+
+    一次转播任务分两个阶段
+    初始化：
+        登陆bilibili
+        从liveInfo.json中查得直播间地址
+        并获得直播网站的对应get_m3u8与push_stream函数
+
+        此时出现任何异常都会推出rebroadcast函数
+
+    每分钟一次，共20次循环：
+        获取m3u8地址
+        开启bilibili直播间
+        发送开播动态（仅一次）
+        开始推流
+
+        为了liver推迟开播、直播中途断开等容错
+        此时出现任何异常都会立即继续下一次循环
+        其中开播动态只会在第一次成功开始推流前发送一次
+        
+
+    Args:
+        args: dict, 结构如下
+            {
+                'time': datetime.datetime, 
+                'liver': string,
+                'site': string, default='YouTube',
+                'title': string, default='liver+'转播',
+            }
+        CONFIG_PATH: str, config.ini的路径
     """
     try:
         logmsg('开始推流项目：\n{liver}:{site}'.format(liver=args['liver'], site=args['site']))

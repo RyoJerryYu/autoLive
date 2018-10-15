@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 from src.methods.m_bilibili import Bilibili
@@ -5,6 +6,17 @@ from src.utitls import logmsg, errmsg
 
 
 def login_bilibili(path):
+    '''封装登陆Bilibili时的log及raise exception
+
+    Args:
+        path: str, cookies文件路径
+    
+    Return:
+        b: Bilibili类, 且已登录
+    
+    Raise:
+        Exception: Cookies登陆失败
+    '''
     b = Bilibili()
     logmsg('尝试通过Cookies登陆Bilibili')
     LOGIN_STATUS = False

@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+'''refresh_area_id.py
+登陆Bilibili，读取直播分区信息，并更新area_id.txt。
+需要Bilibili类，并cookies.txt中已填好可登陆的cookie。
+代码未封装到函数中，不建议在其他代码中导入。
+'''
+
 from datetime import datetime
 
 from src.methods.m_bilibili import Bilibili

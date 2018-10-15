@@ -10,11 +10,25 @@ import requests
 
 
 class Bilibili:
+    '''登陆、开始直播、发动态等与bilibili交互的类。
+
+    大部分未经修改引用自https://github.com/7rikka/autoLive
+    并添加了少部分函数
+
+    Attributes:
+        session: requests.session()
+        csrf: B站账户验证时需的字符串，来自cookie中的bili-jct。
+    '''
     def __init__(self):
         self.session = requests.session()
         self.csrf = None
 
     def login_by_cookies(self, path):
+        '''读取cookies文件并设置cookies
+
+        Args:
+            path: cookies.txt文件的路径
+        '''
         try:
             with open(path, 'r') as f:
                 cookies = {}
@@ -29,6 +43,8 @@ class Bilibili:
             print("[提示]设定cookies失败,请检查是否写入正确的cookies信息")
 
     def login_by_cookies_str(self, cookies_str):
+        '''直接通过cookies字符串登陆
+        '''
         try:
             cookies = {}
             for line in cookies_str.split(';'):
@@ -42,6 +58,11 @@ class Bilibili:
             print("[提示]设定cookies失败,请检查是否写入正确的cookies信息")
 
     def isLogin(self):
+        '''测试cookies能否登陆
+
+        Returns:
+            True | False
+        '''
         req = self.get('https://api.vc.bilibili.com/feed/v1/feed/get_attention_list')
         code = req['code']
         if code == 0:
@@ -50,7 +71,7 @@ class Bilibili:
         else:
             print("[提示]cookies失效！")
             print("[提示]登录返回信息为：" + str(req))
-            sys.exit(1)
+            return False
     
     def post(self, url, data, headers=None, params=None):
         while True:
@@ -216,6 +237,26 @@ class Bilibili:
             return req['data']
     
     def send_dynamic(self, content):
+        '''发送动态
+
+        post访问http://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost
+        发送Bilibili动态
+
+        Args:
+            content: str, 动态的内容
+        
+        Returns:
+            req['data']: post请求返回的data项。
+            example:
+            
+            {
+                'result': 0,
+                'errmsg': '符合条件，允许发布',
+                'dynamic_id': xxxxxxxxxxxx(int),
+                'create_result': 1,
+                '_gt_': 0
+            }
+        '''
         req = self.post(
             url='http://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/repost',
             data={

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import configparser
 from datetime import datetime
 from time import sleep
@@ -9,6 +11,13 @@ from src.rebroadcast import rebroadcast
 
 
 def main(CONFIG_PATH):
+    '''程序主入口
+    
+    调用makeLives获得live列表，添加到scheduler后启动scheduler。
+
+    Args:
+        CONFIG_PATH: str, config.ini的储存位置。
+    '''
     # Read config
     logmsg('程序启动')
     lives = makeLives(CONFIG_PATH)
