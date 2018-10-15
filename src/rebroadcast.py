@@ -52,7 +52,7 @@ def rebroadcast(args, CONFIG_PATH):
         为了liver推迟开播、直播中途断开等容错
         此时出现任何异常都会立即继续下一次循环
         其中开播动态只会在第一次成功开始推流前发送一次
-        
+
 
     Args:
         args: dict, 结构如下
@@ -111,7 +111,7 @@ def rebroadcast(args, CONFIG_PATH):
                 push_stream(url_rtmp, live_url, url_m3u8, FFMPEG_COMMAND)
 
             except Exception as e:
-                msg = str(e) + '\n' + tracemsg(e)
+                msg = tracemsg(e) if len(str(e).strip()) == 0 else str(e)
                 errmsg('normal', '项目:{time} {liver}\n尝试推流失败，retry_count={retry_count}\n'.format(
                     time=args['time'], liver=args['liver'], retry_count=retry_count
                 ) + msg)
