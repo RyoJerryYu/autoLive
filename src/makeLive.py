@@ -109,7 +109,7 @@ def __make_schedule_post_txt(lives):
 
 
 def makeLives(CONFIG_PATH):
-    '''读取schedule.txt，解析，发送B站动态，并输出直播信息列表
+    '''读取schedule.txt，解析，并输出直播信息列表
 
     Args:
         CONFIG_PATH: str, config.ini路径
@@ -134,7 +134,6 @@ def makeLives(CONFIG_PATH):
     config = configparser.ConfigParser()
     config.read("config.ini", encoding="utf-8")
     SCHEDULE_TXT_PATH = config.get('basic', 'SCHEDULE_TXT_PATH')
-    COOKIES_TXT_PATH = config.get('basic', 'COOKIES_TXT_PATH')
 
     # Get live list
     text = ""
@@ -142,6 +141,25 @@ def makeLives(CONFIG_PATH):
         text = file.read()
     lives = __analyse_live_list(text)
     lives.sort(key=lambda live:live['time'])
+
+    return lives
+
+
+def post_schedule(CONFIG_PATH, lives):
+    '''发送时间表动态
+
+    Args:
+        CONFIG_PATH: config.ini路径
+        lives: 直播信息列表
+    
+    Returns:
+        0: 正常发送动态
+        -1: 发送动态过程中出错
+    '''
+    # Read config
+    config = configparser.ConfigParser()
+    config.read("config.ini", encoding="utf-8")
+    COOKIES_TXT_PATH = config.get('basic', 'COOKIES_TXT_PATH')
 
     # Post dynamic
     try:
@@ -153,5 +171,5 @@ def makeLives(CONFIG_PATH):
         if len(str(e).strip()) == 0:
             txt = '\n'+tracemsg(e)
         errmsg('schedule', str(e)+txt)
-    
-    return lives
+        return -1
+    return 0
