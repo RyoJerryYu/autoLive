@@ -16,7 +16,7 @@ import os
 from datetime import datetime, timedelta, timezone
 import configparser
 
-from utitls import errmsg, tracemsg, logmsg
+from src.utitls import errmsg, tracemsg, logmsg
 from src.login_bilibili import login_bilibili
 
 
