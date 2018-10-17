@@ -39,7 +39,6 @@ def main(CONFIG_PATH):
             sleep(600)
         scheduler.shutdown()
     except KeyboardInterrupt:
-        scheduler.shutdown(wait=False)
         errmsg('normal', '因KeyboardInterrupt退出')
     except Exception as e:
         msg = str(e) +'\n' + tracemsg(e)
