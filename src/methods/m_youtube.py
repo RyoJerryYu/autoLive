@@ -69,4 +69,5 @@ def push_stream(url_rtmp, url_live, url_m3u8, command):
     command = command.format(url_m3u8, url_rtmp)
     out, err, errcode = RunCMD(command)
     logmsg('结束推流')
+    return out, err, errcode
 

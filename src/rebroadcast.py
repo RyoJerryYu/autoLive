@@ -88,6 +88,10 @@ def rebroadcast(args, CONFIG_PATH):
                 url_m3u8 = get_m3u8(live_url, LIVE_QUALITY)
 
                 room_id = b.getMyRoomId()
+
+                # 防止前一次直播未结束，先暂存旧直播标题，推流错误时将标题重新改回
+                old_title = b.getRoomTitle(room_id)
+
                 b.updateRoomTitle(room_id, BILIBILI_ROOM_TITLE.format(
                     time=args['time'],
                     liver=args['liver'],
@@ -98,7 +102,7 @@ def rebroadcast(args, CONFIG_PATH):
                 logmsg("开播成功,获得推流地址:{}".format(url_rtmp))
                 sleep(5)
                 
-                # run
+                # 每次直播只发送一次动态
                 if not has_posted_dynamic:
                     b.send_dynamic(
                         '开始转播：{liver}\n时间：{time}\n{title}'.format(
@@ -108,7 +112,14 @@ def rebroadcast(args, CONFIG_PATH):
                         )
                     )
                     has_posted_dynamic = True
-                push_stream(url_rtmp, live_url, url_m3u8, FFMPEG_COMMAND)
+                out, err, errcode = push_stream(url_rtmp, live_url, url_m3u8, FFMPEG_COMMAND)
+
+                # 前一次直播未结束
+                if errcode == 1:
+                    sleep(10)
+                    b.updateRoomTitle(room_id, old_title)
+                    sleep(60)
+                    raise Exception('直播间被占用')
 
             except Exception as e:
                 msg = tracemsg(e) if len(str(e).strip()) == 0 else str(e)

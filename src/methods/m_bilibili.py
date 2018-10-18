@@ -209,6 +209,18 @@ class Bilibili:
             return req['data']['roomid']
         else:
             print("[提示]无法获得直播间id")
+    
+    def getRoomTitle(self, room_id):
+        req = self.get(
+            url='https://api.live.bilibili.com/room/v1/Room/get_info',
+            params={
+                'room_id': room_id,
+                'from': 'room'
+            }
+        )
+        if req['code'] == 0:
+            print("[提示]获得直播间标题为[{}]".format(req['data']['title']))
+            return req['data']['title']
 
     def updateRoomTitle(self, room_id, title):
         req = self.post(
