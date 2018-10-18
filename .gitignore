@@ -109,3 +109,4 @@ log.txt
 err.log
 test.py
 .removed/
+*~
