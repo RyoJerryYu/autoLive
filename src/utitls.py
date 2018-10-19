@@ -2,6 +2,7 @@
 '''封装了程序中使用的小函数
 '''
 from datetime import datetime
+from functools import wraps
 import json
 import os
 import traceback
@@ -90,3 +91,15 @@ def RunCMD(cmd):
         ERR=err, CODE=errcode
     ))
     return out, err, errcode
+
+
+def sigleton(cls):
+    '''单例修饰器
+    '''
+    __instances = {}
+    @wraps(cls)
+    def getinstance(*args, **kw):
+        if cls not in __instances:
+            __instances[cls] = cls(*args, **kw)
+        return __instances[cls]
+    return getinstance

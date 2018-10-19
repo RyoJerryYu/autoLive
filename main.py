@@ -3,8 +3,8 @@
 import configparser
 from datetime import datetime
 from time import sleep
-from apscheduler.schedulers.background import BackgroundScheduler
 
+from src.liveScheduler import LiveScheduler
 from src.utitls import errmsg, logmsg, tracemsg
 from src.makeLive import makeLives, post_schedule
 from src.rebroadcast import rebroadcast
@@ -23,15 +23,9 @@ def main(CONFIG_PATH):
     lives = makeLives(CONFIG_PATH)
     post_schedule(CONFIG_PATH, lives)
 
-    scheduler = BackgroundScheduler()
+    scheduler = LiveScheduler()
     for live in lives:
-        scheduler.add_job(
-            func=rebroadcast, 
-            trigger='date', 
-            run_date=live['time'],
-            args=[live['args'], CONFIG_PATH], 
-            id=live['id']
-        )
+        scheduler.add_live(rebroadcast, live, CONFIG_PATH)
     
     try:
         scheduler.start()

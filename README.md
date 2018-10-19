@@ -9,7 +9,7 @@
 - CentOS 7
 - youtube-dl 2018.10.05
 - ffmpeg 4.0.2-static
-- Python 3.4
+- Python 3.6
 - requests 2.19.1
 - APScheduler 3.5.3
 

@@ -32,7 +32,7 @@ def get_method(site='YouTube'):
     return get_m3u8, push_stream
 
 
-def rebroadcast(args, CONFIG_PATH):
+def rebroadcast(live, CONFIG_PATH):
     """一次转播任务的主函数
 
     一次转播任务分两个阶段
@@ -64,6 +64,7 @@ def rebroadcast(args, CONFIG_PATH):
             }
         CONFIG_PATH: str, config.ini的路径
     """
+    args = live.args()
     try:
         logmsg('开始推流项目：\n{liver}:{site}'.format(liver=args['liver'], site=args['site']))
 
