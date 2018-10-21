@@ -4,11 +4,11 @@
 '''
 import os
 from datetime import datetime, timedelta, timezone
-import configparser
 
 from src.utitls import errmsg, tracemsg, logmsg
 from src.login_bilibili import login_bilibili
 from src.liveScheduler import Live
+from src.Configs import CONFIGs
 
 
 def __analyse_live_list(text):
@@ -54,7 +54,7 @@ def __make_schedule_post_txt(lives):
     return txt
 
 
-def makeLives(CONFIG_PATH):
+def makeLives():
     '''读取schedule.txt，解析，并输出直播信息列表
 
     Args:
@@ -64,9 +64,8 @@ def makeLives(CONFIG_PATH):
         lives: live类列表
     '''
     # Read config
-    config = configparser.ConfigParser()
-    config.read("config.ini", encoding="utf-8")
-    SCHEDULE_TXT_PATH = config.get('basic', 'SCHEDULE_TXT_PATH')
+    config = CONFIGs()
+    SCHEDULE_TXT_PATH = config.SCHEDULE_TXT_PATH
 
     # Get live list
     text = ""
@@ -78,7 +77,7 @@ def makeLives(CONFIG_PATH):
     return lives
 
 
-def post_schedule(CONFIG_PATH, lives):
+def post_schedule(lives):
     '''发送时间表动态
 
     Args:
@@ -90,9 +89,8 @@ def post_schedule(CONFIG_PATH, lives):
         -1: 发送动态过程中出错
     '''
     # Read config
-    config = configparser.ConfigParser()
-    config.read("config.ini", encoding="utf-8")
-    COOKIES_TXT_PATH = config.get('basic', 'COOKIES_TXT_PATH')
+    config = CONFIGs()
+    COOKIES_TXT_PATH = config.COOKIES_TXT_PATH
 
     # Post dynamic
     try:

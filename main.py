@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import configparser
 from datetime import datetime
 from time import sleep
 
@@ -8,6 +7,7 @@ from src.liveScheduler import LiveScheduler
 from src.utitls import errmsg, logmsg, tracemsg
 from src.makeLive import makeLives, post_schedule
 from src.rebroadcast import rebroadcast
+from src.Configs import CONFIGs
 
 
 def main(CONFIG_PATH):
@@ -18,14 +18,18 @@ def main(CONFIG_PATH):
     Args:
         CONFIG_PATH: str, config.ini的储存位置。
     '''
+    # CONFIG初始化，必须放在所有步骤前
+    configs = CONFIGs()
+    configs.set_configs(CONFIG_PATH)
+
     logmsg('程序启动')
 
-    lives = makeLives(CONFIG_PATH)
-    post_schedule(CONFIG_PATH, lives)
+    lives = makeLives()
+    post_schedule(lives)
 
     scheduler = LiveScheduler()
     for live in lives:
-        scheduler.add_live(rebroadcast, live, CONFIG_PATH)
+        scheduler.add_live(rebroadcast, live)
     
     try:
         scheduler.start()

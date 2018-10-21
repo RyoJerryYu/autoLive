@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import configparser
 import os
 from time import sleep
 
@@ -7,6 +6,7 @@ from src.methods.m_bilibili import Bilibili
 from src.methods import m_youtube
 from src.login_bilibili import login_bilibili
 from src.utitls import logmsg, errmsg, loadJson, tracemsg
+from src.Configs import CONFIGs
 
 
 def get_live_url(path, liver, site='YouTube'):
@@ -32,7 +32,7 @@ def get_method(site='YouTube'):
     return get_m3u8, push_stream
 
 
-def rebroadcast(live, CONFIG_PATH):
+def rebroadcast(live):
     """一次转播任务的主函数
 
     一次转播任务分两个阶段
@@ -69,14 +69,13 @@ def rebroadcast(live, CONFIG_PATH):
         logmsg('开始推流项目：\n{liver}:{site}'.format(liver=args['liver'], site=args['site']))
 
         # Read Config
-        config = configparser.ConfigParser()
-        config.read(CONFIG_PATH, encoding='utf-8')
-        COOKIES_TXT_PATH = config.get('basic', 'COOKIES_TXT_PATH')
-        LIVE_INFO_PATH = config.get('basic', 'LIVE_INFO_PATH')
-        BILIBILI_ROOM_TITLE = config.get('live', 'BILIBILI_ROOM_TITLE')
-        FFMPEG_COMMAND = config.get('live', 'FFMPEG_COMMAND')
-        BILIBILI_ROOM_AREA_ID = config.getint('live', 'BILIBILI_ROOM_AREA_ID')
-        LIVE_QUALITY = config.getint('youtube-dl', 'LIVE_QUALITY')
+        config = CONFIGs()
+        COOKIES_TXT_PATH = config.COOKIES_TXT_PATH
+        LIVE_INFO_PATH = config.LIVE_INFO_PATH
+        BILIBILI_ROOM_TITLE = config.BILIBILI_ROOM_TITLE
+        FFMPEG_COMMAND = config.FFMPEG_COMMAND
+        BILIBILI_ROOM_AREA_ID = config.BILIBILI_ROOM_AREA_ID
+        LIVE_QUALITY = config.LIVE_QUALITY
 
         b = login_bilibili(COOKIES_TXT_PATH)
         live_url = get_live_url(LIVE_INFO_PATH, args['liver'], args['site'])
