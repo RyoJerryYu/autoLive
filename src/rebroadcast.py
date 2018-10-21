@@ -104,11 +104,12 @@ def rebroadcast(args, CONFIG_PATH):
                 
                 # 每次直播只发送一次动态
                 if not has_posted_dynamic:
-                    b.send_dynamic(
-                        '开始转播：{liver}\n时间：{time}\n{title}'.format(
+                    dynamic_id = b.send_dynamic(
+                        '开始转播：{liver}\n时间：{time}\n{title}\n{url}'.format(
                             liver=args['liver'],
                             time=args['time'].strftime(r'%m.%d %H:%M'),
-                            title=args['title']
+                            title=args['title'],
+                            url='https://live.bilibili.com/'+str(room_id)
                         )
                     )
                     has_posted_dynamic = True
@@ -129,6 +130,23 @@ def rebroadcast(args, CONFIG_PATH):
             
             retry_count += 1
             sleep(60)
+        
+        # 关闭项目前删除已发送的动态
+        # 若未发送动态则一定未转播成功
+
+        # 但已发送动态不一定转播成功，可能是由于前一次转播未结束导致
+        # 此BUG以后再调整
+        if has_posted_dynamic:
+            b.delete_dynamic(dynamic_id)
+        else:
+            b.send_dynamic(
+                '转播失败: {liver}, {site}\n时间: {time}\n{title}'.format(
+                    liver=args['liver'],
+                    time=args['time'],
+                    title=args['title'],
+                    site=args['site']
+                )
+            )
 
     except Exception as e:
         txt = ''

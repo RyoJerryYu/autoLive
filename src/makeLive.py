@@ -97,9 +97,9 @@ def __analyse_live_list(text):
 def __make_schedule_post_txt(lives):
     '''读取lives列表，输出用于发动态的时间表字符串
     '''
-    txt = '今日转播：\n'
+    txt = '今日转播：\n时间均为日本时区\n'
     for live in lives:
-        txt += '{}, {}, {}\n{}\n'.format(
+        txt += '{}, {}, {}\n{}\n\n'.format(
             live['time'].strftime(r'%m.%d %H:%M'),
             live['args']['liver'],
             live['args']['site'],

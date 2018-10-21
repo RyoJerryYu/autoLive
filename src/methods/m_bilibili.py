@@ -258,8 +258,8 @@ class Bilibili:
             content: str, 动态的内容
         
         Returns:
-            req['data']: post请求返回的data项。
-            example:
+            req['data']['dynamic_id']: post请求返回的动态id。
+            req['data']如下:
             
             {
                 'result': 0,
@@ -278,6 +278,23 @@ class Bilibili:
                 'content': content,
                 'at_uids': '',
                 'ctrl': '[]',
+                'csrf_token': self.csrf
+            }
+        )
+        if req['code'] == 0:
+            return req['data']['dynamic_id']
+    
+    def delete_dynamic(self, dynamic_id):
+        '''删除动态
+
+        :param int dynamic_id: 所删除动态的id
+        '''
+        uid = self.get_my_basic_info()['mid']
+        req = self.post(
+            url='https://api.vc.bilibili.com/dynamic_repost/v1/dynamic_repost/rm_rp_dyn',
+            data={
+                'uid': uid,
+                'dynamic_id': dynamic_id,
                 'csrf_token': self.csrf
             }
         )
