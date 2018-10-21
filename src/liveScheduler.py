@@ -17,7 +17,7 @@ class LiveScheduler(BackgroundScheduler):
         __livings: dict, key与value同上，保存正在进行中的live类
 
     Methods:
-        add_live, get_lives, get_live, remove_live
+        add_live, get_lives, get_live, remove_live, post_schedule
     '''
     def __init__(self, *args, **kw):
         self.__lives = {}

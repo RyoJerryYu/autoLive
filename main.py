@@ -24,15 +24,22 @@ def main(CONFIG_PATH):
 
     logmsg('程序启动')
 
+    # 解析schedule.txt并发送每日转播表动态
     lives = makeLives()
     post_schedule(lives)
 
+    # LiveScheduler为单例类，初始化需在web运行前
     scheduler = LiveScheduler()
     for live in lives:
         scheduler.add_live(rebroadcast, live)
     
     try:
         scheduler.start()
+        logmsg('时间表启动')
+
+        # APScheduler直接调用shutdown不会等待未开始执行的任务
+        # get_jobs返回空列表时所有任务都已开始执行
+        # 此时调用shutdown才会等待已开始执行的任务结束
         while len(scheduler.get_jobs()) != 0:
             sleep(600)
         scheduler.shutdown()

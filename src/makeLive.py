@@ -28,6 +28,7 @@ def __analyse_live_list(text):
     for line in text.split('\n'):
         try:
             line = line.strip()
+            # 跳过注释
             if len(line) == 0 or line[0] == '#':
                 continue
             live = Live.livefScheduleTxt(line)
@@ -57,9 +58,6 @@ def __make_schedule_post_txt(lives):
 def makeLives():
     '''读取schedule.txt，解析，并输出直播信息列表
 
-    Args:
-        CONFIG_PATH: str, config.ini路径
-    
     Returns:
         lives: live类列表
     '''
@@ -81,7 +79,6 @@ def post_schedule(lives):
     '''发送时间表动态
 
     Args:
-        CONFIG_PATH: config.ini路径
         lives: 直播信息列表
     
     Returns:

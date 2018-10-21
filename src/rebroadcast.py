@@ -62,7 +62,6 @@ def rebroadcast(live):
                 'site': string, default='YouTube',
                 'title': string, default='liver+'转播',
             }
-        CONFIG_PATH: str, config.ini的路径
     """
     args = live.args()
     try:
@@ -113,6 +112,8 @@ def rebroadcast(live):
                         )
                     )
                     has_posted_dynamic = True
+                    logmsg('项目{}发送动态'.format(args['liver']))
+                    
                 out, err, errcode = push_stream(url_rtmp, live_url, url_m3u8, FFMPEG_COMMAND)
 
                 # 前一次直播未结束
@@ -138,6 +139,7 @@ def rebroadcast(live):
         # 此BUG以后再调整
         if has_posted_dynamic:
             b.delete_dynamic(dynamic_id)
+            logmsg('项目{}删除动态'.format(args['liver']))
         else:
             b.send_dynamic(
                 '转播失败: {liver}, {site}\n时间: {time}\n{title}'.format(
@@ -147,6 +149,7 @@ def rebroadcast(live):
                     site=args['site']
                 )
             )
+            logmsg('项目{}发送转播失败动态'.format(args['liver']))
 
     except Exception as e:
         txt = ''
