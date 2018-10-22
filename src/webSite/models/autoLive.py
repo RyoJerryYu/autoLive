@@ -6,9 +6,37 @@ from datetime import datetime
 __default_table_title = ['时间', 'Vtuber', '直播网站', '自定义标题']
 
 def header_menus():
-    return []
+    '''返回layer模板中所用的header_menu
+    '''
+    header_menus = [
+        {
+            'name': 'にじさんじ常用网站',
+            'Is_dropdown': True,
+            'contains':[
+                {
+                    'name': 'YouTubeのコメントを見るやつ',
+                    'url': r'https://2434.fun/'
+                },
+                {
+                    'name': 'にじさんじwiki',
+                    'url': r'https://wikiwiki.jp/nijisanji/'
+                },
+                {
+                    'name': 'SEEDs24H',
+                    'url': r'https://2434dola.wixsite.com/seeds24h-official'
+                },
+                {
+                    'name': '今週のかえみと',
+                    'url': r'https://mato-liver.com/archives/category/kemt'
+                },
+            ]
+        }
+    ]
+    return header_menus
 
 def schedule_sections():
+    '''返回schedule页所需的数据
+    '''
     # 获得site列表 现在可用的只有YouTube
     sites = ['YouTube']
 

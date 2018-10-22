@@ -11,10 +11,18 @@ mod = Blueprint('autoLive', __name__, url_prefix='/autoLive')
 
 @mod.route('/')
 def autoLive_root():
+    if len(flRequest.args) != 0:
+        abort(401)
     return redirect(url_for('autoLive.schedule'))
 
 @mod.route('/schedule', methods=['GET', 'POST'])
 def schedule():
+    '''处理时间表增删查的网页
+
+    增加项目时POST存在参数Add
+    删除项目时POST存在参数Delete
+    Delete的值为删除项的live_id
+    '''
     if flRequest.method == 'POST':
         if flRequest.form.get('Add', None):
             try:

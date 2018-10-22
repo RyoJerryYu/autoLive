@@ -44,7 +44,7 @@ def main(CONFIG_PATH):
         # while len(scheduler.get_jobs()) != 0:
         #     sleep(600)
 
-        web.run()
+        web.run(host='0.0.0.0', port=2434)
 
         scheduler.shutdown()
     except KeyboardInterrupt:
