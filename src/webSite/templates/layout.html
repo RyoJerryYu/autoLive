@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	{#
+		{block head}
+		{{header_menus: dict}}
+		{{form_action: url}}
+		{block form
+			{{map_id: str}}
+			{block content}
+			{block descr}
+			{block sections}
+			{block actions}
+		}
+	#}
+	<head>
+		<meta charset="utf-8">
+		<title>autoLive {% block head %}WEB{% endblock %}</title>
+		<meta name="viewport" content="initial-scale=1.0">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/cascade.css') }}">
+		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="{{ url_for('static', filename='css/mobile.css') }}" type="text/css" />
+		<link rel="shortcut icon" href="{{ url_for('static', filename='midokure.ico') }}">
+		<script src="{{ url_for('static', filename='scripts/cbi.js') }}"></script>
+		<script src="{{ url_for('static', filename='scripts/xhr.js') }}"></script>
+	</head>
+
+	<body class="lang_en">
+		<header>
+			<div class="fill">
+				<div class="container">
+					<a class="brand" href="#">autoLive</a>
+					<ul class="nav">
+						{# 
+							'header_menus' like this:
+							 [
+								{
+									'name': 'setting', 'Is_dropdown': False,
+									'url': '....'
+								},
+								{
+									'name': 'schedule', 'Is_dropdown': True,
+									'contains': [
+										{'name':'...', 'url': '...'},{...}
+									]
+								}
+							]
+						 #}
+						{% for menu in header_menus %}
+							{% if menu['Is_dropdown'] %}
+							<li class="dropdown"><a class="menu" href="#">{{ menu['name'] }}</a><ul class="dropdown-menu">
+								{% for dropdown_menu in menu['contains'] %}
+								<li><a href="{{ dropdown_menu['url'] }}">{{ dropdown_menu['name'] }}</a></li>
+								{% endfor %}
+							</ul></li>
+							{% else %}
+							<li><a href="{{ menu['url'] }}">{{ menu['name'] }}</a></li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+					<div class="pull-right">
+						<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
+							<span class="label success" id="xhr_poll_status_on">Auto Refresh on</span>
+							<span class="label" id="xhr_poll_status_off" style="display:none">Auto Refresh off</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div id="maincontent" class="container">
+			<noscript>
+				<div class="alert-message warning">
+					<h4>JavaScript required!</h4>
+					<p>You must enable JavaScript in your browser or LuCI will not work properly.</p>
+				</div>
+			</noscript>
+			{% block form %}
+			<form method="POST" name="cbi" action="{{ form_action }}">
+				<div class="cbi-map">
+					<h2 name="content">{% block content %}H2{% endblock %}</h2>
+					<div class="cbi-map-descr">{% block descr %}Here's a scentence.{% endblock %}</div>
+					{% block sections %}
+					{% endblock %}
+				</div>
+				{% block actions %}
+				<div class="cbi-page-actions">
+					<input class="cbi-button cbi-button-apply" type="button" value="Save &#38; Apply" onclick="cbi_submit(this, 'cbi.apply')" />
+					<input class="cbi-button cbi-button-save" type="submit" value="Save" />
+					<input class="cbi-button cbi-button-reset" type="button" value="Reset" onclick="location.href='/cgi-bin/luci/admin/network/dhcp'" />
+				</div>
+				{% endblock %}
+			</form>
+			{% endblock %}
+			<footer>
+				<a href="https://github.com/openwrt/luci">Stylesheets and Scripts copy from LuCI openwrt-18.06</a> / OpenWrt 18.06.1 r7258-5eb055306f
+				
+			</footer>
+		</div>
+	</body>
+</html>
+
+
+

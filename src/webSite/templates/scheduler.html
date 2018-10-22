@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{#
+    {{header_menus: list of dict, in layout}}
+    {{form_action: url, in layout}}
+    {{ sections: dict, as follow }}
+    sections:{
+        add_job:{
+            title, descr, 
+            table_titles:[table_title],
+            row: [{input_type, name, [contains]}, ...],
+            button:????
+        },
+        schedule_jobs:{
+            title, descr, 
+            table_titles:[...]
+            rows:[{values:[...], button:???}, ...]
+            
+        },
+        running_jobs:{
+            ...
+        }
+    }
+#}
+{% block head %}时间表{% endblock %}
+{% block content %}时间表{% endblock %}
+{% block descr %}时间表的增删改查{% endblock %}
+{% block sections %}
+
+
+{# add_job #}
+    <div class="cbi-section cbi-tblsection">
+        <h3>{{ sections['add_job']['title'] }}</h3>
+        <div class="cbi-section-descr">{{ sections['add_job']['descr'] }}</div>
+
+        <div class="table cbi-secion-table">
+            <div class="tr cib-section-table-titles anoymous">
+                {% for table_title in sections['add_job']['table_titles'] %}
+                <div class="th cbi-section-table-cell">
+                    {{ table_title }}
+                </div>
+                {% endfor %}
+                <div class="th cbi-section-table-cell cbi-section-actions"></div>
+            </div>
+            
+            <div class="tr cbi-section-table-row">
+                {% for value in sections['add_job']['row'] %}
+                <div class="td cbi-value-field">
+                    {% if value['input_type'] == 'text' %}
+                    <input class="cbi-input-text" name="{{ value['name'] }}" type="{{ value['input_type'] }}"/>
+                    {% elif value['input_type'] == 'select' %}
+                    <select class="cbi-input-select" name="{{ value['name'] }}">
+                        {% for option in value['contains'] %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <div class="td cbi-section-table-cell nowrap cbi-section-actions">
+                    <button class="cbi-button cbi-button-add" type="submit" value="Add" name="Add">
+                        提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{# schedule_jobs #}
+    <div class="cbi-section cbi-tblsection">
+        <h3>{{ sections['schedule_jobs']['title'] }}</h3>
+        <div class="cbi-section-descr">{{ sections['schedule_jobs']['descr'] }}</div>
+
+        <div class="table cbi-secion-table">
+            <div class="tr cib-section-table-titles anoymous">
+                {% for table_title in sections['schedule_jobs']['table_titles'] %}
+                <div class="th cbi-section-table-cell">
+                    {{ table_title }}
+                </div>
+                {% endfor %}
+                <div class="th cbi-section-table-cell cbi-section-actions"></div>
+            </div>
+            
+            {% for row in sections['schedule_jobs']['rows'] %}
+            <div class="tr cbi-section-table-row">
+                {% for value in row['values'] %}
+                <div class="td cbi-value-field">
+                    {{value}}
+                </div>
+                {% endfor %}
+                <div class="td cbi-section-table-cell nowrap cbi-section-actions">
+                    <button class="cbi-button cbi-button-remove" type="submit" value="{{ row['id'] }}" name="Delete">
+                        删除
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{# running_jobs #}
+
+{% endblock %}
+{% block actions %}
+{% endblock %}
