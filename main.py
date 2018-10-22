@@ -8,6 +8,7 @@ from src.utitls import errmsg, logmsg, tracemsg
 from src.makeLive import makeLives, post_schedule
 from src.rebroadcast import rebroadcast
 from src.Configs import CONFIGs
+from src.webSite import web
 
 
 def main(CONFIG_PATH):
@@ -40,8 +41,11 @@ def main(CONFIG_PATH):
         # APScheduler直接调用shutdown不会等待未开始执行的任务
         # get_jobs返回空列表时所有任务都已开始执行
         # 此时调用shutdown才会等待已开始执行的任务结束
-        while len(scheduler.get_jobs()) != 0:
-            sleep(600)
+        # while len(scheduler.get_jobs()) != 0:
+        #     sleep(600)
+
+        web.run()
+
         scheduler.shutdown()
     except KeyboardInterrupt:
         errmsg('normal', '因KeyboardInterrupt退出')
