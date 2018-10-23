@@ -2,7 +2,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from functools import wraps
 from datetime import datetime, timedelta, timezone
 
-from src.utitls import sigleton
+from src.utitls import sigleton, errmsg, tracemsg, logmsg
+from src.Configs import CONFIGs
+from src.login_bilibili import login_bilibili
 
 
 @sigleton
@@ -20,9 +22,23 @@ class LiveScheduler(BackgroundScheduler):
         add_live, get_lives, get_live, remove_live, post_schedule
     '''
     def __init__(self, *args, **kw):
+        '''构造函数
+
+        构造实例时会添加自动发送每日动态的任务
+        每日本地时间15时时发送每日动态
+        由于是单例类，所以此任务不会重复添加
+        '''
         self.__lives = {}
         self.__livings = {}
         super().__init__(*args, **kw)
+        
+        # 此处post_schedule使用本地时区
+        # APScheduler中使用时区只支持pytz
+        self.add_job(
+            self.post_schedule,
+            trigger='cron',
+            hour=15
+        )
     
     def __exefunc_decorator(self, func):
         '''执行函数装饰器
@@ -85,6 +101,54 @@ class LiveScheduler(BackgroundScheduler):
         self.remove_job(live_id)
         live = self.__lives.pop(live_id)
         return live
+    
+    def __make_schedule_post_txt(self, lives):
+        '''读取lives列表，输出用于发动态的时间表字符串
+        '''
+        txt = '今日转播：\n时间均为日本时区\n'
+        for live in lives:
+            txt += '{}, {}, {}\n{}\n\n'.format(
+                live.time.strftime(r'%m.%d %H:%M'),
+                live.liver,
+                live.site,
+                live.title
+            )
+        return txt
+    
+    def post_schedule(self, lives=None):
+        '''发送时间表动态
+
+        Args:
+            lives: 直播信息列表
+        
+        Returns:
+            0: 正常发送动态
+            -1: 发送动态过程中出错
+        '''
+        # 兼容旧版保留lives参数
+        # 如果没有给lives参数则获取时间表中的lives
+        if not lives:
+            lives = self.__lives.values()
+        # Read config
+        config = CONFIGs()
+        COOKIES_TXT_PATH = config.COOKIES_TXT_PATH
+
+        # Post dynamic
+        try:
+            schedule_post_txt = self.__make_schedule_post_txt(lives)
+            b = login_bilibili(COOKIES_TXT_PATH)
+            if b.send_dynamic(schedule_post_txt):
+                logmsg('发送每日动态成功')
+            else:
+                errmsg('发送每日动态失败')
+                return -1
+        except Exception as e:
+            txt = ''
+            if len(str(e).strip()) == 0:
+                txt = '\n'+tracemsg(e)
+            errmsg('schedule', str(e)+txt)
+            return -1
+        return 0
     
 
 class Live:

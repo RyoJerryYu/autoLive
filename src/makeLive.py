@@ -6,7 +6,6 @@ import os
 from datetime import datetime, timedelta, timezone
 
 from src.utitls import errmsg, tracemsg, logmsg
-from src.login_bilibili import login_bilibili
 from src.liveScheduler import Live
 from src.Configs import CONFIGs
 
@@ -41,20 +40,6 @@ def __analyse_live_list(text):
     return lives
 
 
-def __make_schedule_post_txt(lives):
-    '''读取lives列表，输出用于发动态的时间表字符串
-    '''
-    txt = '今日转播：\n时间均为日本时区\n'
-    for live in lives:
-        txt += '{}, {}, {}\n{}\n\n'.format(
-            live.time.strftime(r'%m.%d %H:%M'),
-            live.liver,
-            live.site,
-            live.title
-        )
-    return txt
-
-
 def makeLives():
     '''读取schedule.txt，解析，并输出直播信息列表
 
@@ -73,31 +58,3 @@ def makeLives():
     lives.sort(key=lambda live:live.time)
 
     return lives
-
-
-def post_schedule(lives):
-    '''发送时间表动态
-
-    Args:
-        lives: 直播信息列表
-    
-    Returns:
-        0: 正常发送动态
-        -1: 发送动态过程中出错
-    '''
-    # Read config
-    config = CONFIGs()
-    COOKIES_TXT_PATH = config.COOKIES_TXT_PATH
-
-    # Post dynamic
-    try:
-        schedule_post_txt = __make_schedule_post_txt(lives)
-        b = login_bilibili(COOKIES_TXT_PATH)
-        b.send_dynamic(schedule_post_txt)
-    except Exception as e:
-        txt = ''
-        if len(str(e).strip()) == 0:
-            txt = '\n'+tracemsg(e)
-        errmsg('schedule', str(e)+txt)
-        return -1
-    return 0

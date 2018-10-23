@@ -5,7 +5,7 @@ from time import sleep
 
 from src.liveScheduler import LiveScheduler
 from src.utitls import errmsg, logmsg, tracemsg
-from src.makeLive import makeLives, post_schedule
+from src.makeLive import makeLives
 from src.rebroadcast import rebroadcast
 from src.Configs import CONFIGs
 from src.webSite import web
@@ -26,8 +26,9 @@ def main(CONFIG_PATH):
     logmsg('程序启动')
 
     # 解析schedule.txt并发送每日转播表动态
+    # 发送每日动态的任务已整合入LiveScheduler类中
     lives = makeLives()
-    post_schedule(lives)
+    # post_schedule(lives)
 
     # LiveScheduler为单例类，初始化需在web运行前
     scheduler = LiveScheduler()
