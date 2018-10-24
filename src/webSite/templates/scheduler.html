@@ -7,17 +7,22 @@
         add_job:{
             title, descr, 
             table_titles:[table_title],
-            row: [{input_type, name, [contains]}, ...],
-            button:????
+            row: [{input_type, name, [contains]}, ...]
         },
         schedule_jobs:{
             title, descr, 
             table_titles:[...]
-            rows:[{values:[...], button:???}, ...]
+            rows:[{values:[...], id}, ...]
             
         },
         running_jobs:{
-            ...
+            title, descr,
+            jobs:[
+                {
+                    title,
+                    rows:[{title, value}, ...]
+                },{...}
+            ]
         }
     }
 #}
@@ -100,6 +105,21 @@
 
 
 {# running_jobs #}
+    <div class="cbi-section">
+        <h3>{{ sections['running_jobs']['title'] }}</h3>
+        <div class="cbi-section-descr">{{ sections['running_jobs']['descr'] }}</div>
+        {% for job in sections['running_jobs']['jobs'] %}
+        <h5>{{ job['title'] }}</h5>
+        <div class="table" width="100%">
+            {% for row in job['rows'] %}
+            <div class="tr">
+                <div class="td left" width="33%">{{ row['title'] }}</div>
+                <div class="td left">{{ row['value'] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 {% block actions %}

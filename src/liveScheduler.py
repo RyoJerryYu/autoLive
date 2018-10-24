@@ -56,7 +56,10 @@ class LiveScheduler(BackgroundScheduler):
         def wrapper(live, *args):
             live_id = live.live_id()
             self.__lives.pop(live_id)
-            self.__livings[live_id] = live
+            self.__livings[live_id] = {
+                'live': live,
+                'startT': datetime.now()
+            }
             func(live, *args)
             self.__livings.pop(live_id)
         return wrapper
@@ -101,6 +104,11 @@ class LiveScheduler(BackgroundScheduler):
         self.remove_job(live_id)
         live = self.__lives.pop(live_id)
         return live
+
+    def get_livings(self):
+        '''获取已运行的live列表
+        '''
+        return self.__livings
     
     def __make_schedule_post_txt(self, lives):
         '''读取lives列表，输出用于发动态的时间表字符串

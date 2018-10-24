@@ -61,6 +61,24 @@ def schedule_sections():
                 'id': live_id
             }
         )
+    
+    # 获得查看运行中项目所需的job列表
+    jobs = []
+    for live_id, job in LiveScheduler().get_livings().items():
+        running_rows=[
+            {'title': 'YouTuber', 'value': job['live'].liver},
+            {'title': '直播网站', 'value': job['live'].site},
+            {'title': '直播间自定义标题', 'value': job['live'].title},
+            {'title': '预计开始时间', 'value': job['live'].time},
+            {'title': '实际开始时间', 'value': job['startT']},
+            {'title': '持续时间', 'value': datetime.now() - job['startT']}
+        ]
+        jobs.append(
+            {
+                'title': live_id,
+                'rows': running_rows
+            }
+        )
 
     # 添加直播项中需要的值
     add_job_value = {
@@ -83,8 +101,16 @@ def schedule_sections():
         'rows': rows
     }
 
+    # 查看运行中项目所需要的值
+    running_jobs_value = {
+        'title': '运行中的项目',
+        'descr': '正在运行中的项目，可能会出现偏差',
+        'jobs': jobs
+    }
+
     sections = {
         'add_job': add_job_value,
-        'schedule_jobs': schedule_jobs_value
+        'schedule_jobs': schedule_jobs_value,
+        'running_jobs': running_jobs_value
     }
     return sections
