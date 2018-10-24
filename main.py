@@ -5,7 +5,7 @@ from time import sleep
 
 from src.liveScheduler import LiveScheduler
 from src.utitls import errmsg, logmsg, tracemsg
-from src.makeLive import makeLives
+from src.makeLive import makeLives, saveLives
 from src.rebroadcast import rebroadcast
 from src.Configs import CONFIGs
 from src.webSite import web
@@ -56,6 +56,7 @@ def main(CONFIG_PATH):
     
     if scheduler.running:
         scheduler.shutdown(wait=False)
+    saveLives(scheduler.get_lives().values())
     logmsg('程序结束')
 
 

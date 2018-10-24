@@ -58,3 +58,43 @@ def makeLives():
     lives.sort(key=lambda live:live.time)
 
     return lives
+
+
+def saveLives(lives):
+    '''读取live列表，以相应格式输入schedule.txt
+    '''
+    # Read config
+    config = CONFIGs()
+    SCHEDULE_TXT_PATH = config.SCHEDULE_TXT_PATH
+
+    # Make text
+    texts = [
+        '# 时间表',
+        '# 格式：',
+        '# time@liver@site@title',
+        '# time：直播时间，格式为HHMM，只接受未来24小时内的直播，检测出直播时间在运行程序之前时，会自动认为直播在运行程序第二天开始。',
+        '# liver：只接受liveInfo.json中存在的liver名。（可自行按json格式添加到liveInfo文件中）',
+        '# site：直播网站，目前只接受YouTube。而且不填默认为YouTube。',
+        '# title：填入config.ini中直播间标题的title中，可选，不填默认为liver+"转播"',
+        '',
+        '# 例：',
+        '# 1900@桜凛月@绝地求生',
+        '# 2100@黒井しば',
+        '# 2240@飛鳥ひな@YouTube',
+        '# 0640@伏見ガク@YouTube@おはガク！',
+    ]
+    for live in lives:
+        line = '{time}@{liver}@{site}@{title}'.format(
+            time=live.time.strftime('%H%M'),
+            liver=live.liver,
+            site=live.site,
+            title=live.title
+        )
+        texts.append(line)
+    
+    text = ''
+    for line in texts:
+        text += line+'\n'
+    
+    with open(SCHEDULE_TXT_PATH, 'w', encoding='utf-8') as file:
+        file.write(text)
