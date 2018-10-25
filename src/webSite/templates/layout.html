@@ -48,11 +48,11 @@
 							{% if menu['Is_dropdown'] %}
 							<li class="dropdown"><a class="menu" href="#">{{ menu['name'] }}</a><ul class="dropdown-menu">
 								{% for dropdown_menu in menu['contains'] %}
-								<li><a href="{{ dropdown_menu['url'] }}">{{ dropdown_menu['name'] }}</a></li>
+								<li><a href="{{ dropdown_menu['url'] }}" target="_Blank">{{ dropdown_menu['name'] }}</a></li>
 								{% endfor %}
 							</ul></li>
 							{% else %}
-							<li><a href="{{ menu['url'] }}">{{ menu['name'] }}</a></li>
+							<li><a href="{{ menu['url'] }}" target="_Blank">{{ menu['name'] }}</a></li>
 							{% endif %}
 						{% endfor %}
 					</ul>
