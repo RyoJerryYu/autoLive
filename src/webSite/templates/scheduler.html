@@ -35,7 +35,11 @@
 {# add_job #}
     <div class="cbi-section cbi-tblsection">
         <h3>{{ sections['add_job']['title'] }}</h3>
-        <div class="cbi-section-descr">{{ sections['add_job']['descr'] }}</div>
+        <div class="cbi-section-descr">
+            {% for line in sections['add_job']['descr'].split('\n') %}
+            {{ line }}<br>
+            {% endfor %}
+        </div>
 
         <div class="table cbi-secion-table">
             <div class="tr cib-section-table-titles anoymous">
@@ -74,7 +78,11 @@
 {# schedule_jobs #}
     <div class="cbi-section cbi-tblsection">
         <h3>{{ sections['schedule_jobs']['title'] }}</h3>
-        <div class="cbi-section-descr">{{ sections['schedule_jobs']['descr'] }}</div>
+        <div class="cbi-section-descr">
+            {% for line in sections['schedule_jobs']['descr'].split('\n') %}
+            {{ line }}<br>
+            {% endfor %}
+        </div>
 
         <div class="table cbi-secion-table">
             <div class="tr cib-section-table-titles anoymous">
@@ -107,7 +115,11 @@
 {# running_jobs #}
     <div class="cbi-section">
         <h3>{{ sections['running_jobs']['title'] }}</h3>
-        <div class="cbi-section-descr">{{ sections['running_jobs']['descr'] }}</div>
+        <div class="cbi-section-descr">
+            {% for line in sections['running_jobs']['descr'].split('\n') %}
+            {{ line }}<br>
+            {% endfor %}
+        </div>
         {% for job in sections['running_jobs']['jobs'] %}
         <h5>{{ job['title'] }}</h5>
         <div class="table" width="100%">

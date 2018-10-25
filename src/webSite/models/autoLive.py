@@ -83,8 +83,11 @@ def schedule_sections():
 
     # 添加直播项中需要的值
     add_job_value = {
-        'title': '添加',
-        'descr': '添加时间表项目',
+        'title': '添加新项目',
+        'descr': '添加时间表项目。\n'\
+                 '其中时间一栏填入HHMM格式的四位数字，代表未来24小时内对应日本时区的时间。\n'\
+                 '目前只能接受未来24小时内开始的直播。如要立即开播，填入1分钟后的日本时区时间即可。\n'\
+                 '自定义标题可不填，不填时默认值为"YouTuber名+转播"。',
         'table_titles': __default_table_title,
         'row': [
             {'input_type': 'text', 'name': 'time'},
@@ -97,7 +100,10 @@ def schedule_sections():
     # 查看时间表中需要的值
     schedule_jobs_value = {
         'title': '已注册项目',
-        'descr': '时间表中将要运行的项目',
+        'descr': '时间表中预定要运行的项目。\n'\
+                 '时间一栏为日本时区时间。\n'\
+                 '每天会在本地时间下午15时在B站发送一次每日时间表动态，内容即为当时此时间表内的内容。\n'\
+                 '表内的项目不一定都能转播成功，直播更改日期或是延迟20分钟以上都不能转播成功。',
         'table_titles': __default_table_title,
         'rows': rows
     }
@@ -105,7 +111,8 @@ def schedule_sections():
     # 查看运行中项目所需要的值
     running_jobs_value = {
         'title': '运行中的项目',
-        'descr': '正在运行中的项目，可能会出现偏差',
+        'descr': '正在运行中的项目。\n'\
+                 '其中的项目不一定都正在转播，有可能是直播开始前正在尝试开始转播，或是直播结束后正在尝试掉线重连。',
         'jobs': jobs
     }
 
