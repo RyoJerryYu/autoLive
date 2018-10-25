@@ -49,7 +49,8 @@ def schedule_sections():
     # 获得查看时间表预定中所需的列表
     lives = LiveScheduler().get_lives()
     rows = []
-    for live_id, live in lives.items():
+    # 获取时将时间表按时间排序
+    for live_id, live in sorted(lives.items(), key=lambda kv: kv[1].time):
         rows.append(
             {
                 'values':[
