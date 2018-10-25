@@ -9,6 +9,28 @@
 
 程序运行于`Python3`。
 
+## 一键安装脚本
+- 以下所有步骤中的粘贴不能使用ctrl+v！应使用右键->粘贴。
+- 将以下两行命令粘贴入Xshell，自动下载安装脚本并运行：
+```bash
+sudo yum install -y wget
+wget https://raw.githubusercontent.com/RyoJerryYu/autoLive/master/install.sh && chmod +x install.sh && bash install.sh
+```
+- 运行大概3分钟左右后，会出现如下提示：
+```
+###############################
+#                             #
+# paste your bilibili cookies #
+#                             #
+###############################
+```
+- 此时将直播所用的账号的cookie串粘贴，回车继续运行
+- 出现此`nohup: redirectiong stderr to stdout`提示后，可以直接关闭Xshell
+- 然后浏览器登陆`<服务器ip>:2434/autoLive/`，如果没有报错，则安装成功。
+- 后续更新时只需重新粘贴最初的两行命令即可。
+- 使用一键安装脚本，而不进行其他设置的话，以下的部分可以不看了。
+- 默认自带的VTuber只包括にじさんじ。如果需要转播其他VTuber需要手动修改`liveInfo.json`，格式请参照下面`liveInfo.json`的格式。
+
 ## 测试环境
 - CentOS 7
 - youtube-dl 2018.10.05
