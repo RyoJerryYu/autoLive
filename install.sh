@@ -42,7 +42,7 @@ echo "# paste your bilibili cookies #"
 echo "#                             #"
 echo "###############################"
 read -p "paste here:" cookie
-echo "cookie" > ~/autoLive/cookies.txt
+echo "${cookie}" > ~/autoLive/cookies.txt
 
 cd ~/autoLive
 nohup python36 -u main.py > logfile.txt &
