@@ -32,7 +32,14 @@ firewall-cmd --reload
 sudo yum install -y git
 
 cd ~
+mv -f autoLive/config.ini ./
+mv -f autoLive/liveInfo.json ./
+mv -f autoLive/schedule.txt ./
+rm -rf autoLive
 git clone https://github.com/RyoJerryYu/autoLive.git
+mv -f ./config.ini autoLive/
+mv -f ./liveInfo.json autoLive/
+mv -f ./schedule.txt autoLive/
 
 sudo yum install -y screen
 

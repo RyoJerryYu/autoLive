@@ -11,10 +11,14 @@
 
 ## 一键安装脚本
 - 以下所有步骤中的粘贴不能使用ctrl+v！应使用右键->粘贴。
-- 将以下两行命令粘贴入Xshell，自动下载安装脚本并运行：
+- 将以下几行命令粘贴入Xshell，自动下载安装脚本并运行：
 ```bash
+cd ~
+rm -f install.sh
 sudo yum install -y wget
-wget https://raw.githubusercontent.com/RyoJerryYu/autoLive/master/install.sh && chmod +x install.sh && bash install.sh
+wget https://raw.githubusercontent.com/RyoJerryYu/autoLive/master/install.sh
+chmod +x install.sh
+bash install.sh
 ```
 - 运行大概3分钟左右后，会出现如下提示：
 ```
