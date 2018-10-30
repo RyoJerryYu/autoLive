@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{#
+    {{header_menus: list of dict, in layout}}
+    {{form_action: url, in layout}}
+    {{ sections: dict, as follow }}
+
+    sections:{...:{title, descr, items:[...] }, ... }
+
+    items: 
+    input_type == 'checkbox'
+    { title, input_type, name, value }
+    input_type == 'text'
+    { title, input_type, name, value }
+    input_type == 'select'
+    { title, input_type, name, value, options:[{value, display}, ... ] }
+#}
+{% block head %}设定{% endblock %}
+{% block content %}设定{% endblock %}
+{% block descr %}设定的更改{% endblock %}
+{% block sections %}
+{% for section in sections.values() %}
+<div class="cbi-section">
+	<h3>{{ section['title'] }}</h3>
+    <div class="cbi-section-descr">
+        {% for line in section['descr'].split('\n') %}
+        {{ line }}<br>
+        {% endfor %}
+    </div>
+	<div class="cbi-section-node">
+        {% for item in section['items'] %}
+        <div class="cbi-value">
+            <label class="cbi-value-title">{{ item['title'] }}</label>
+            <div class="cbi-value-field">
+
+            {% if item['input_type'] == 'checkbox' %}
+                {% if item['value'] == True %}
+                    <input class="cbi-input-checkbox" name="{{ item['name'] }}" type="checkbox" checked="checked">
+                {% else %}
+                    <input class="cbi-input-checkbox" name="{{ item['name'] }}" type="checkbox">
+                {% endif %}
+
+            {% elif item['input_type'] == 'text' %}
+                <input class="cbi-input-text" name="{{ item['name'] }}" type="text" value="{{ item['value'] }}"/>
+
+            {% elif item['input_type'] == 'select' %}
+                <select class="cbi-input-select" name="{{ item['name'] }}">
+                {% for option in item['options'] %}
+                    {% if option['value'] == item['value'] %}
+                        <option value="{{ option['value'] }}" selected="selected">{{ option['display'] }}</option>
+                    {% else %}
+                        <option value="{{ option['value'] }}">{{ option['display'] }}</option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+
+            {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+	</div>
+</div>
+{% endfor %}
+{% endblock %}
+{% block actions %}
+<div class="cbi-page-actions">
+    <button class="cbi-button cbi-button-apply" type="submit" value="Apply" name="Action">
+        应用
+    </button>
+    <button class="cbi-button cbi-button-reset" type="submit" value="Reset" name="Action">
+        复位
+    </button>
+</div>
+{% endblock %}
