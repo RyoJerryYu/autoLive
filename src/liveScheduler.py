@@ -113,13 +113,14 @@ class LiveScheduler(BackgroundScheduler):
     def __make_schedule_post_txt(self, lives):
         '''读取lives列表，输出用于发动态的时间表字符串
         '''
+        DAILY_DYNAMIC_FORM = CONFIGs().DAILY_DYNAMIC_FORM
         txt = '今日转播：\n时间均为日本时区\n'
         for live in lives:
-            txt += '{}, {}, {}\n{}\n\n'.format(
-                live.time.strftime(r'%m.%d %H:%M'),
-                live.liver,
-                live.site,
-                live.title
+            txt += DAILY_DYNAMIC_FORM.format(
+                time=live.time.strftime(r'%m.%d %H:%M'),
+                liver=live.liver,
+                site=live.site,
+                title=live.title
             )
         return txt
     
@@ -140,6 +141,11 @@ class LiveScheduler(BackgroundScheduler):
         # Read config
         config = CONFIGs()
         COOKIES_TXT_PATH = config.COOKIES_TXT_PATH
+        IS_SEND_DAILY_DYNAMIC = config.IS_SEND_DAILY_DYNAMIC
+
+        # 如果没有直播预定或设置为不发送动态，则中止
+        if len(lives) == 0 or not IS_SEND_DAILY_DYNAMIC:
+            return 0
 
         # Post dynamic
         try:
@@ -182,7 +188,12 @@ class Live:
         if site == '':
             site = 'YouTube'
         if title == '':
-            title = liver + ' 转播'
+            DEFAULT_TITLE_PARAM = CONFIGs().DEFAULT_TITLE_PARAM
+            title = DEFAULT_TITLE_PARAM.format(
+                time=time.strftime(r'%m.%d %H:%M'),
+                liver=liver,
+                site=site
+            )
         if isinstance(time, str):
             time = Live.analyse_time_text(time)
         self.time = time

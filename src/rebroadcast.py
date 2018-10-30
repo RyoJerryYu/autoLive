@@ -75,6 +75,8 @@ def rebroadcast(live):
         FFMPEG_COMMAND = config.FFMPEG_COMMAND
         BILIBILI_ROOM_AREA_ID = config.BILIBILI_ROOM_AREA_ID
         LIVE_QUALITY = config.LIVE_QUALITY
+        IS_SEND_PRELIVE_DYNAMIC = config.IS_SEND_PRELIVE_DYNAMIC
+        PRELIVE_DYNAMIC_FORM = config.PRELIVE_DYNAMIC_FORM
 
         b = login_bilibili(COOKIES_TXT_PATH)
         live_url = get_live_url(LIVE_INFO_PATH, args['liver'], args['site'])
@@ -102,11 +104,12 @@ def rebroadcast(live):
                 sleep(5)
                 
                 # 每次直播只发送一次动态
-                if not has_posted_dynamic:
+                if not has_posted_dynamic and IS_SEND_PRELIVE_DYNAMIC:
                     dynamic_id = b.send_dynamic(
-                        '开始转播：{liver}\n时间：{time}\n{title}\n{url}'.format(
+                        PRELIVE_DYNAMIC_FORM.format(
                             liver=args['liver'],
                             time=args['time'].strftime(r'%m.%d %H:%M'),
+                            site=args['site'],
                             title=args['title'],
                             url='https://live.bilibili.com/'+str(room_id)
                         )
@@ -140,7 +143,7 @@ def rebroadcast(live):
         if has_posted_dynamic:
             b.delete_dynamic(dynamic_id)
             logmsg('项目{}删除动态'.format(args['liver']))
-        else:
+        """ else:
             b.send_dynamic(
                 '转播失败: {liver}, {site}\n时间: {time}\n{title}'.format(
                     liver=args['liver'],
@@ -149,7 +152,7 @@ def rebroadcast(live):
                     site=args['site']
                 )
             )
-            logmsg('项目{}发送转播失败动态'.format(args['liver']))
+            logmsg('项目{}发送转播失败动态'.format(args['liver'])) """
 
     except Exception as e:
         txt = ''

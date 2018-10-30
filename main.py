@@ -22,6 +22,7 @@ def main(CONFIG_PATH):
     # CONFIG初始化，必须放在所有步骤前
     configs = CONFIGs()
     configs.set_configs(CONFIG_PATH)
+    WEB_PORT = configs.WEB_PORT
 
     logmsg('程序启动')
 
@@ -45,7 +46,7 @@ def main(CONFIG_PATH):
         # while len(scheduler.get_jobs()) != 0:
         #     sleep(600)
 
-        web.run(host='0.0.0.0', port=2434)
+        web.run(host='0.0.0.0', port=WEB_PORT)
 
         scheduler.shutdown()
     except KeyboardInterrupt:
