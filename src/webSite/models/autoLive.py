@@ -1,6 +1,7 @@
 from src.utitls import loadJson
 from src.Configs import CONFIGs
 from src.liveScheduler import LiveScheduler
+from src.login_bilibili import login_bilibili
 from datetime import datetime
 
 __default_table_title = ['时间', 'Vtuber', '直播网站', '自定义标题']
@@ -120,5 +121,109 @@ def schedule_sections():
         'add_job': add_job_value,
         'schedule_jobs': schedule_jobs_value,
         'running_jobs': running_jobs_value
+    }
+    return sections
+
+
+def configs_sections():
+    '''返回设置页面所需数据
+    '''
+    config = CONFIGs()
+
+    # BILIBILI_ROOM_AREA_ID所需的分区列表
+    b = login_bilibili(config.COOKIES_TXT_PATH)
+    area_list_data = b.getLiveAreaList()
+    area_list = []
+    for zone in area_list_data:
+        for area in zone['list']:
+            if area['lock_status'] == '0':
+                area_list.append(
+                    {'value': int(area['id']), 'display': area['name']}
+                )
+
+    # bilibili
+    item_BILIBILI_ROOM_TITLE = {
+        'title': '直播间标题格式',
+        'input_type': 'text',
+        'name': 'BILIBILI_ROOM_TITLE',
+        'value': config.BILIBILI_ROOM_TITLE
+    }
+    item_DEFAULT_TITLE_PARAM = {
+        'title': '默认title参数格式',
+        'input_type': 'text',
+        'name': 'DEFAULT_TITLE_PARAM',
+        'value': config.DEFAULT_TITLE_PARAM
+    }
+    item_BILIBILI_ROOM_AREA_ID = {
+        'title': '直播间分区',
+        'input_type': 'select',
+        'name': 'BILIBILI_ROOM_AREA_ID',
+        'value': config.BILIBILI_ROOM_AREA_ID,
+        'options': area_list
+    }
+    item_IS_SEND_DAILY_DYNAMIC = {
+        'title': '发送每日转播列表动态',
+        'input_type': 'checkbox',
+        'name': 'IS_SEND_DAILY_DYNAMIC',
+        'value': config.IS_SEND_DAILY_DYNAMIC
+    }
+    item_DAILY_DYNAMIC_FORM = {
+        'title': '每日转播列表动态格式',
+        'input_type': 'text',
+        'name': 'DAILY_DYNAMIC_FORM',
+        'value': config.DAILY_DYNAMIC_FORM
+    }
+    item_IS_SEND_PRELIVE_DYNAMIC = {
+        'title': '转播前发送动态',
+        'input_type': 'checkbox',
+        'name': 'IS_SEND_PRELIVE_DYNAMIC',
+        'value': config.IS_SEND_PRELIVE_DYNAMIC
+    }
+    item_PRELIVE_DYNAMIC_FORM = {
+        'title': '转播前动态格式',
+        'input_type': 'text',
+        'name': 'PRELIVE_DYNAMIC_FORM',
+        'value': config.PRELIVE_DYNAMIC_FORM
+    }
+    section_bilibili = {
+        'title': 'BILIBILI',
+        'descr': 'B站直播间与动态相关设置',
+        'items': [
+            item_BILIBILI_ROOM_TITLE,
+            item_DEFAULT_TITLE_PARAM,
+            item_BILIBILI_ROOM_AREA_ID,
+            item_IS_SEND_DAILY_DYNAMIC,
+            item_DAILY_DYNAMIC_FORM,
+            item_IS_SEND_PRELIVE_DYNAMIC,
+            item_PRELIVE_DYNAMIC_FORM,
+        ]
+    }
+
+    # liveParam
+    item_LIVE_QUALITY = {
+        'title': '最高清晰度',
+        'input_type': 'select',
+        'name': 'LIVE_QUALITY',
+        'value': config.LIVE_QUALITY,
+        'options': [
+            {'value': 0, 'display': 0},
+            {'value': 240, 'display': 240},
+            {'value': 360, 'display': 360},
+            {'value': 480, 'display': 480},
+            {'value': 720, 'display': 720},
+            {'value': 1080, 'display': 1080},
+        ]
+    }
+    section_liveParam = {
+        'title': 'liveParam',
+        'descr': '清晰度等直播相关设定',
+        'items': [
+            item_LIVE_QUALITY,
+        ]
+    }
+
+    sections = {
+        'bilibili': section_bilibili,
+        'liveParam': section_liveParam,
     }
     return sections
