@@ -151,7 +151,9 @@ class Bilibili:
             url='https://api.live.bilibili.com/room/v1/Area/getList',
             params={'show_pinyin': show_pinyin}
         )
-        print(req)
+        if req['code'] == 0:
+            return req['data']
+            
 
     def startLive(self, room_id, area_id):
         """
