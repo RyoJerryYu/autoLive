@@ -66,7 +66,7 @@ def configs():
         config.IS_SEND_PRELIVE_DYNAMIC = True if flRequest.form.get('IS_SEND_PRELIVE_DYNAMIC') else False
         config.PRELIVE_DYNAMIC_FORM = flRequest.form['PRELIVE_DYNAMIC_FORM']
 
-        config.LIVE_QUALITY = flRequest.form['LIVE_QUALITY']
+        config.LIVE_QUALITY = int(flRequest.form['LIVE_QUALITY'])
         config.save_configs()
     return render_template(
         'configs.html',
