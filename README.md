@@ -13,12 +13,12 @@
 - 以下所有步骤中的粘贴不能使用ctrl+v！应使用右键->粘贴。
 - 将以下几行命令粘贴入Xshell，自动下载安装脚本并运行：
 ```bash
-cd ~
-rm -f install.sh
-sudo yum install -y wget
-wget https://raw.githubusercontent.com/RyoJerryYu/autoLive/master/install.sh
-chmod +x install.sh
-bash install.sh
+cd ~ # 进入/root/文件夹中。install.sh默认在此目录中运行。
+rm -f install.sh # 移除上次安装遗留的install.sh文件
+sudo yum install -y wget # 如果系统中不自带wget，则安装wget。
+wget https://raw.githubusercontent.com/RyoJerryYu/autoLive/master/install.sh # 下载安装脚本install.sh
+chmod +x install.sh # 给与安装脚本权限
+bash install.sh # 运行安装脚本
 ```
 - 运行大概3分钟左右后，会出现如下提示：
 ```
@@ -29,10 +29,30 @@ bash install.sh
 ###############################
 ```
 - 此时将直播所用的账号的cookie串粘贴，回车继续运行
-- 出现此`nohup: redirectiong stderr to stdout`提示后，可以直接关闭Xshell
-- 然后浏览器登陆`<服务器ip>:2434/autoLive/`，如果没有报错，则安装成功。
-- 后续更新时只需重新粘贴最初的两行命令即可。
-- 使用一键安装脚本，而不进行其他设置的话，以下的部分可以不看了。
+- 出现输入端口的提示后，输入0~65535间的一个数字，此数字即为下面所用的端口号。注意不要跟常用的80、22等端口冲突。如不知道怎样的端口会冲突，推荐使用2434端口。
+
+- 出现`安装终了`的提示后，安装完成。现在一键安装脚本不会自动启动程序，请按下面步骤在screen中启动程序。
+    - 逐行输入以下命令：
+    ```bash
+    screen -S autoLive # 打开新的screen窗口并命名为autoLive。在screen中启动的程序即使关闭shell也能继续运行。
+    cd ~/autoLive # 进入autoLive文件夹。本程序必须从autoLive文件夹中打开。
+    python36 main.py # 使用python3.6运行本程序。
+    ```
+    - 程序运行后，先按`ctrl+A`，然后按下`d`键退出screen窗口。此时在screen中启动的程序仍会在后台运行。
+- 然后使用浏览器登陆`http://<服务器ip>:<端口号>/autoLive/`，如果没有报错，则安装成功。
+
+- 停止程序时请按以下步骤停止：
+    - 输入以下命令：
+    ```bash
+    screen -r autoLive # 重新打开名为autoLive的screen窗口
+    ```
+    - 按下`ctrl+C`停止程序。如果有转播任务正在运行可能需要多按几次。
+    - 输入以下命令：
+    ```bash
+    exit # 退出并关闭screen窗口。
+    ```
+    - 程序停止后可按上面启动程序的步骤重新启动。
+- 后续更新时只需先停止程序，然后重新运行最初的几行命令即可。
 - 默认自带的VTuber只包括にじさんじ。如果需要转播其他VTuber需要手动修改`liveInfo.json`，格式请参照下面`liveInfo.json`的格式。
 
 ## 测试环境
@@ -156,7 +176,7 @@ python3 main.py
 - [X] 每日自动发送每日时间表
 - [X] 退出程序时保存时间表
 - [X] 网页端现在可以查看正在运行中的项目了
-- [ ] 增加网页端设置页面
+- [X] 增加网页端设置页面
 - [ ] 增加可以设置的项目
 - [ ] 可以从网页端增删liveInfo
 - [ ] 修正因每日动态过长而无法发送问题

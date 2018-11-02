@@ -7,11 +7,6 @@ sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release
 
 sudo yum install -y wget
 
-wget https://raw.githubusercontent.com/Sporesirius/ffmpeg-install/master/ffmpeg-install
-chmod a+x ffmpeg-install
-./ffmpeg-install --install release
-rm -f ffmpeg-install
-
 wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
 
@@ -32,24 +27,17 @@ firewall-cmd --reload
 sudo yum install -y git
 
 cd ~
-mv -f autoLive/config.ini ./
-mv -f autoLive/liveInfo.json ./
-mv -f autoLive/schedule.txt ./
-rm -rf autoLive
+git clone https://github.com/jnaqsh/ffmpeg_installer/
+cd ffmpeg_installer
+chmod +x ./*.sh
+sudo ./ff_installer.sh
+cd ~
+rm -rf ffmpeg_installer
+
+cd ~
 git clone https://github.com/RyoJerryYu/autoLive.git
-mv -f ./config.ini autoLive/
-mv -f ./liveInfo.json autoLive/
-mv -f ./schedule.txt autoLive/
 
 sudo yum install -y screen
 
-echo "###############################"
-echo "#                             #"
-echo "# paste your bilibili cookies #"
-echo "#                             #"
-echo "###############################"
-read -p "paste here:" cookie
-echo "${cookie}" > ~/autoLive/cookies.txt
-
 cd ~/autoLive
-nohup python36 -u main.py > logfile.txt &
+python36 updateConfigs.py
