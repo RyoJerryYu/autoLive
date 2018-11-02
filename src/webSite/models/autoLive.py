@@ -3,6 +3,7 @@ from src.Configs import CONFIGs
 from src.liveScheduler import LiveScheduler
 from src.login_bilibili import login_bilibili
 from datetime import datetime
+from flask import url_for
 
 __default_table_title = ['时间', 'Vtuber', '直播网站', '自定义标题']
 
@@ -13,6 +14,7 @@ def header_menus():
         {
             'name': 'にじさんじ常用网站',
             'Is_dropdown': True,
+            'Is_new_tab': True,
             'contains':[
                 {
                     'name': 'YouTubeのコメントを見るやつ',
@@ -31,6 +33,18 @@ def header_menus():
                     'url': r'https://mato-liver.com/archives/category/kemt'
                 },
             ]
+        },
+        {
+            'name': '时间表',
+            'Is_dropdown': False,
+            'Is_new_tab': False,
+            'url': url_for('autoLive.schedule')
+        },
+        {
+            'name': '设置',
+            'Is_dropdown': False,
+            'Is_new_tab': False,
+            'url': url_for('autoLive.configs')
         }
     ]
     return header_menus

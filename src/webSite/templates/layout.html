@@ -33,11 +33,11 @@
 							'header_menus' like this:
 							 [
 								{
-									'name': 'setting', 'Is_dropdown': False,
+									'name': 'setting', 'Is_dropdown': False, 'Is_new_tab': False,
 									'url': '....'
 								},
 								{
-									'name': 'schedule', 'Is_dropdown': True,
+									'name': 'schedule', 'Is_dropdown': True, 'Is_new_tab': True,
 									'contains': [
 										{'name':'...', 'url': '...'},{...}
 									]
@@ -45,14 +45,22 @@
 							]
 						 #}
 						{% for menu in header_menus %}
-							{% if menu['Is_dropdown'] %}
+							{% if menu['Is_dropdown'] and menu['Is_new_tab'] %}
 							<li class="dropdown"><a class="menu" href="#">{{ menu['name'] }}</a><ul class="dropdown-menu">
 								{% for dropdown_menu in menu['contains'] %}
 								<li><a href="{{ dropdown_menu['url'] }}" target="_Blank">{{ dropdown_menu['name'] }}</a></li>
 								{% endfor %}
 							</ul></li>
-							{% else %}
+							{% elif menu['Is_dropdown'] and not menu['Is_new_tab'] %}
+							<li class="dropdown"><a class="menu" href="#">{{ menu['name'] }}</a><ul class="dropdown-menu">
+								{% for dropdown_menu in menu['contains'] %}
+								<li><a href="{{ dropdown_menu['url'] }}">{{ dropdown_menu['name'] }}</a></li>
+								{% endfor %}
+							</ul></li>
+							{% elif not menu['Is_dropdown'] and menu['Is_new_tab'] %}
 							<li><a href="{{ menu['url'] }}" target="_Blank">{{ menu['name'] }}</a></li>
+							{% else %}
+							<li><a href="{{ menu['url'] }}">{{ menu['name'] }}</a></li>
 							{% endif %}
 						{% endfor %}
 					</ul>
