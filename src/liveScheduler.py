@@ -185,6 +185,8 @@ class Live:
         :param str site: 默认值为'YouTube'
         :param str title: 默认值为liver+' 转播'
         '''
+        if isinstance(time, str):
+            time = Live.analyse_time_text(time)
         if site == '':
             site = 'YouTube'
         if title == '':
@@ -194,8 +196,6 @@ class Live:
                 liver=liver,
                 site=site
             )
-        if isinstance(time, str):
-            time = Live.analyse_time_text(time)
         self.time = time
         self.liver = liver
         self.site = site
