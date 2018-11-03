@@ -277,7 +277,7 @@ class Bilibili:
                 'dynamic_id': '0',
                 'type': '4',
                 'rid': '0',
-                'content': content,
+                'content': content.replace(r'\n', '\n'),
                 'at_uids': '',
                 'ctrl': '[]',
                 'csrf_token': self.csrf
