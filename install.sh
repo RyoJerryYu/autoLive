@@ -27,12 +27,10 @@ firewall-cmd --reload
 sudo yum install -y git
 
 cd ~
-git clone https://github.com/jnaqsh/ffmpeg_installer/
-cd ffmpeg_installer
-chmod +x ./*.sh
-sudo ./ff_installer.sh
-cd ~
-rm -rf ffmpeg_installer
+wget https://raw.githubusercontent.com/Sporesirius/ffmpeg-install/master/ffmpeg-install
+chmod a+x ffmpeg-install
+./ffmpeg-install --install release
+rm -f ffmpeg-install
 
 cd ~
 mkdir autoLiveTemp
