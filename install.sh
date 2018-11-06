@@ -35,7 +35,12 @@ cd ~
 rm -rf ffmpeg_installer
 
 cd ~
+mkdir autoLiveTemp
+mv -f autoLive/*.json autoLiveTemp/
+rm -rf autoLive
 git clone https://github.com/RyoJerryYu/autoLive.git
+mv -f autoLiveTemp/*.json autoLive/
+rm -rf autoLiveTemp
 
 sudo yum install -y screen
 
