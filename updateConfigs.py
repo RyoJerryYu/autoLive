@@ -3,6 +3,8 @@ from configparser import ConfigParser
 
 
 def SetupConfigs():
+    COOKIE_FAILED = False
+    PORT_FAILED = False
     try:
         print('###############################')
         print('#                             #')
@@ -16,6 +18,7 @@ def SetupConfigs():
             f.write(cookies)
     except:
         print('cookies写入失败，请手动写入cookies.txt')
+        COOKIE_FAILED = True
     try:
         new_configs = ConfigParser()
         new_configs.read('config.ini', encoding='utf-8')
@@ -23,12 +26,13 @@ def SetupConfigs():
         print('如果此处设置不成功，也可在config.ini设置')
         port = input('请输入端口号(推荐输入2434)：')
         port = int(port)
-        if 0 < port or port > 65535:
+        if port < 0 or 65535 < port:
             raise Exception
         new_configs.set('basic', 'WEB_PORT', str(port))
         new_configs.write(open('config.ini', 'w', encoding='utf-8'))
     except:
         print('端口号设置失败，请手动从config.ini设置。')
+        PORT_FAILED = True
     
     print('###############################')
     print('从ver2.1.0起一键安装脚本不再自动启动程序。')
@@ -51,6 +55,10 @@ def SetupConfigs():
     print('exit # 退出并关闭screen窗口。')
     print('#############################')
     print('安装终了！')
+    if COOKIE_FAILED:
+        print('cookies写入失败，请手动写入cookies.txt')
+    if PORT_FAILED:
+        print('端口号设置失败，请手动从config.ini设置。')
 
 if __name__ == '__main__':
     SetupConfigs()
