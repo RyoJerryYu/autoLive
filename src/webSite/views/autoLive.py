@@ -40,6 +40,7 @@ def schedule():
             LiveScheduler().pop_live(flRequest.form['Delete'])
         else:
             abort(401)
+        return redirect(url_for('autoLive.schedule'))
     return render_template(
         'scheduler.html', 
         header_menus=header_menus(), 
@@ -68,6 +69,7 @@ def configs():
 
         config.LIVE_QUALITY = int(flRequest.form['LIVE_QUALITY'])
         config.save_configs()
+        return redirect(url_for('autoLive.schedule'))
     return render_template(
         'configs.html',
         header_menus=header_menus(),
