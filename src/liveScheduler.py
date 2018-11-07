@@ -222,12 +222,22 @@ class Live:
     def analyse_time_text(time_txt):
         '''分析四位长度的time_txt并返回符合的datetime实例
 
-        time_txt长度仅能为4位，为HHMM，24小时制
+        time_txt可接受特殊值："now"
+        此外仅能填入长度为4位，格式为HHMM，的24小时制时间
         当得出时间小于当前时，自动调整为第二天
+
+        特殊值：
+        now: 返回datetime.now()的30秒后
 
         :param str time_txt: 四位长度HHMM字符串
         '''
         JST = timezone(timedelta(hours=+9), 'JST')
+        assert isinstance(time_txt, str)
+
+        # time_txt填入now参数时
+        if time_txt.lower() == 'now':
+            time = datetime.now(JST) + timedelta(seconds=+30)
+            return time
 
         # time格式仅能为HHMM，24小时制
         if len(time_txt) != 4:
@@ -253,7 +263,8 @@ class Live:
 
         时间表格式：
         time@liver@site@title
-        time：直播时间，格式为HHMM，只接受未来24小时内的直播，检测出直播时间在运行程序之前时，会自动认为直播在运行程序第二天开始。
+        time: 直播时间，可接收特殊参数"now"。
+              此外格式仅能为HHMM，只接受未来24小时内的直播，检测出直播时间在运行程序之前时，会自动认为直播在运行程序第二天开始。
         liver：只接受liveInfo.json中存在的liver名。（可自行按json格式添加到liveInfo文件中）
         site：直播网站，目前只接受YouTube。而且不填默认为YouTube。
         title：填入config.ini中直播间标题的title中，可选，不填默认为"{liver}"+"转播"
