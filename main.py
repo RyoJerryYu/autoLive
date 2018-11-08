@@ -32,7 +32,7 @@ def main(CONFIG_PATH):
     # post_schedule(lives)
 
     # LiveScheduler为单例类，初始化需在web运行前
-    scheduler = LiveScheduler()
+    scheduler = LiveScheduler(timezone='Asia/Tokyo')
     for live in lives:
         scheduler.add_live(rebroadcast, live)
     
